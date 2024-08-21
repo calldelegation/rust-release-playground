@@ -1,2 +1,2 @@
 # rust-release-playground
-12345
+123456
