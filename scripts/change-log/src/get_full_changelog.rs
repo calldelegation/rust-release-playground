@@ -25,7 +25,7 @@ pub async fn get_changelog_info(
     commit_sha: &str,
 ) -> Result<ChangelogInfo, Box<dyn std::error::Error>> {
     let pr_info = octocrab
-        .repos("FuelLabs", "fuels-ts")
+        .repos("calldelegation", "rust-release-playground")
         .list_pulls(commit_sha.to_string())
         .send()
         .await?;
@@ -92,9 +92,11 @@ pub async fn get_changelogs(
     base: &str,
     head: &str,
 ) -> Result<Vec<ChangelogInfo>, Box<dyn std::error::Error>> {
-    let comparison = octocrab.commits(owner, repo).compare(base, head).send().await?;
     println!("BASE: {:?}", base);
     println!("HEAD: {:?}", head);
+    println!("REPO: {:?}", repo);
+    println!("OWNER: {:?}", owner);
+    let comparison = octocrab.commits(owner, repo).compare(base, head).send().await?;
     
     println!("Comparison status: {:?}", comparison.status);
     

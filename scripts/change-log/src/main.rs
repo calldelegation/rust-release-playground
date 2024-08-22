@@ -9,13 +9,15 @@ use octocrab::Octocrab;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv::dotenv().ok();
     let github_token = std::env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN is not set in the environment");
-
+    let repo_owner = std::env::var("GITHUB_REPOSITORY_OWNER").expect("Repository owner not found");
+    let repo_name = std::env::var("GITHUB_REPOSITORY_NAME").expect("Repository name not found");
+    
     let octocrab = Octocrab::builder().personal_token(github_token).build()?;
 
-    // let latest_release_tag = get_latest_release_tag().await?;
+    let latest_release_tag = get_latest_release_tag().await?;
 
     // let changelogs = get_changelogs(&octocrab, "FuelLabs", "fuels-ts", &latest_release_tag, "master").await?;
-    let changelogs = get_changelogs(&octocrab, "FuelLabs", "fuels-ts", "v0.91.0", "v0.92.0").await?;
+    let changelogs = get_changelogs(&octocrab, &repo_owner, &repo_name, &latest_release_tag, "main").await?;
     let full_changelog = generate_changelog(changelogs);
 
     println!("{}", full_changelog);
